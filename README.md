@@ -3,7 +3,7 @@
 
 Main view:
 
-![ScreenShot](images\2019-09-11_06-05-22.png)
+![ScreenShot](images/2019-09-11_06-05-22.png)
 
 
 Win view:
