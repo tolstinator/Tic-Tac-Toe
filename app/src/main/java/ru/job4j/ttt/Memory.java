@@ -1,11 +1,12 @@
 package ru.job4j.ttt;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class Memory {
+public class Memory implements Serializable {
     private final char[][] matrix = new char[3][3];
     private final List<Integer> btnsFree = new LinkedList<>();
     private final List<Integer> answers = new ArrayList<>();
@@ -71,6 +72,38 @@ public class Memory {
             result.add(R.id.button9);
             result.add(R.id.button5);
             result.add(R.id.button3);
+        }
+        return result;
+    }
+
+    public List<Integer> listPlayers(char player) {
+        List<Integer> result = new ArrayList<>();
+        if (matrix[0][0] == player) {
+            result.add(R.id.button);
+        }
+        if (matrix[0][1] == player) {
+            result.add(R.id.button4);
+        }
+        if (matrix[0][2] == player) {
+            result.add(R.id.button9);
+        }
+        if (matrix[1][0] == player) {
+            result.add(R.id.button2);
+        }
+        if (matrix[1][1] == player) {
+            result.add(R.id.button5);
+        }
+        if (matrix[1][2] == player) {
+            result.add(R.id.button8);
+        }
+        if (matrix[2][0] == player) {
+            result.add(R.id.button3);
+        }
+        if (matrix[2][1] == player) {
+            result.add(R.id.button6);
+        }
+        if (matrix[2][2] == player) {
+            result.add(R.id.button7);
         }
         return result;
     }

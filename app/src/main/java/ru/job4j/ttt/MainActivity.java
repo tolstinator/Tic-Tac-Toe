@@ -1,12 +1,17 @@
 package ru.job4j.ttt;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +30,62 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(MainActivity.class.getName(), "onCreate");
+        load(savedInstanceState);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(MainActivity.class.getName(), "onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(MainActivity.class.getName(), "onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(MainActivity.class.getName(), "onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(MainActivity.class.getName(), "onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(MainActivity.class.getName(), "onDestroy");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        Log.d(MainActivity.class.getName(), "onSaveInstanceState");
+        outState.putSerializable("memory", memory);
+    }
+
+    private void load(Bundle state) {
+        if (state != null) {
+            memory = (Memory) state.getSerializable("memory");
+            for (Integer id : memory.listPlayers('X')) {
+                ((Button) findViewById(id)).setText("X");
+            }
+            for (Integer id : memory.listPlayers('O')) {
+                ((Button) findViewById(id)).setText("O");
+            }
+        }
+    }
+
+    @Override
+    public void addContentView(View view, ViewGroup.LayoutParams params) {
+        super.addContentView(view, params);
     }
 
     private Runnable animationWin(List<Integer> ids) {
