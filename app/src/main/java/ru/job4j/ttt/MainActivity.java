@@ -5,13 +5,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Switch;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +22,14 @@ public class MainActivity extends AppCompatActivity {
     private Memory memory = new Memory(
             Arrays.asList(R.id.button, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9)
     );
+
+    private ArrayList<Integer> listXButton = new ArrayList<>();
+    private ArrayList<Integer> listOButton = new ArrayList<>();
+    private char currentPlayer = 'X';
+
+    private final String LISTXBUTTON = "listXButton";
+    private final String LISTOBUTTON = "listOButton";
+    private final String CURRENTPLAYER = "currentPlayer";
 
     public Executor pool = Executors.newSingleThreadExecutor();
 
@@ -65,27 +72,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
         Log.d(MainActivity.class.getName(), "onSaveInstanceState");
-        outState.putSerializable("memory", memory);
+        outState.putIntegerArrayList(LISTXBUTTON, listXButton);
+        outState.putIntegerArrayList(LISTOBUTTON, listOButton);
+        outState.putChar(CURRENTPLAYER, currentPlayer);
     }
 
     private void load(Bundle state) {
         if (state != null) {
-            memory = (Memory) state.getSerializable("memory");
-            for (Integer id : memory.listPlayers('X')) {
+            for (Integer id : state.getIntegerArrayList(LISTXBUTTON)) {
                 ((Button) findViewById(id)).setText("X");
+                memory.setBusy(id, seekX(id), seekY(id), 'X');
             }
-            for (Integer id : memory.listPlayers('O')) {
+            for (Integer id : state.getIntegerArrayList(LISTOBUTTON)) {
                 ((Button) findViewById(id)).setText("O");
+                memory.setBusy(id, seekX(id), seekY(id), 'O');
             }
+            currentPlayer = state.getChar(CURRENTPLAYER);
         }
-    }
-
-    @Override
-    public void addContentView(View view, ViewGroup.LayoutParams params) {
-        super.addContentView(view, params);
     }
 
     private Runnable animationWin(List<Integer> ids) {
@@ -126,23 +132,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void answer(View view) {
-        Integer buttonId = view.getId();
+        boolean sw = ((Switch) findViewById(R.id.switch1)).isChecked();
+        int buttonId = view.getId();
         if (memory.isFree(buttonId)) {
-            pool.execute(animation(Collections.singletonList(buttonId), "X"));
-            memory.setBusy(buttonId, seekX(buttonId), seekY(buttonId), 'X');
-            List<Integer> winX = memory.winX();
+            List<Integer> winX = makeMove(buttonId, currentPlayer);
             if (winX.size() != 0) {
                 pool.execute(animationWin(winX));
                 clearFields();
-            } else {
+            } else if (currentPlayer == 'O' && sw) {
                 if (memory.isFinish()) {
                     msg("Game over!");
                     clearFields();
                 } else {
                     Integer buttonIdAI = memory.rnd();
-                    pool.execute(animation(Collections.singletonList(buttonIdAI), "O"));
-                    memory.setBusy(buttonIdAI, seekX(buttonIdAI), seekY(buttonIdAI), 'O');
-                    List<Integer> winO = memory.winO();
+                    List<Integer> winO = makeMove(buttonIdAI, 'O');
                     if (winO.size() != 0) {
                         pool.execute(animationWin(winO));
                         clearFields();
@@ -152,10 +155,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private List<Integer> makeMove(int id, char player) {
+        pool.execute(animation(Collections.singletonList(id), player == 'X' ? "X" : "O"));
+        listXButton.add(id);
+        memory.setBusy(id, seekX(id), seekY(id), player);
+        currentPlayer = currentPlayer == 'X' ? 'O' : 'X';
+        List<Integer> result;
+        if (player == 'X') {
+            result = memory.winX();
+        } else {
+            result = memory.winO();
+        }
+        return result;
+    }
+
     private void clearFields() {
         List<Integer> btns = Arrays.asList(R.id.button, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9);
         pool.execute(animation(btns, ""));
         memory = new Memory(btns);
+        listXButton = new ArrayList<>();
+        listOButton = new ArrayList<>();
     }
 
     private int seekX(Integer id) {

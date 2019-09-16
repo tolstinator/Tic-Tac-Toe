@@ -19,6 +19,16 @@
         android:textColor="#FFEB3B"
         android:textSize="30sp" />
 
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp"
+        android:checked="true"
+        android:gravity="center"
+        android:text="AI:   "
+        android:textColor="#FFEB3B" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
