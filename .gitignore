@@ -1,52 +1,29 @@
-*.iml
 .gradle
-/local.properties
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-
-.gradle
-
-/gradle
-
-/local.properties
-
-.DS_Store
-
-/build
-
-/captures
-
-.externalNativeBuild
-
 .idea
-
-
+.DS_Store
+.externalNativeBuild
+captures
+gradle
+local.properties
+build
+*.iml
+release
 
 # Compiled class file
 
 *.class
 
-
-
 # Log file
 
 *.log
-
-
 
 # BlueJ files
 
 *.ctxt
 
-
-
 # Mobile Tools for Java (J2ME)
 
 .mtj.tmp/
-
-
 
 # Package Files #
 
@@ -63,8 +40,6 @@
 *.tar.gz
 
 *.rar
-
-
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 
