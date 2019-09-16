@@ -3,14 +3,14 @@
 
 Main view:
 
-![ScreenShot](images/2019-09-11_06-05-22.png)
+![ScreenShot](images/"Main view".png)
 
 
 Win view:
 
-![ScreenShot](images/2019-09-11_06-06-27.png)
+![ScreenShot](images/"Win view".png)
 
 
 Stalemate view:
 
-![ScreenShot](images/2019-09-11_06-09-15.png)
+![ScreenShot](images/"Stalemate view".png)
