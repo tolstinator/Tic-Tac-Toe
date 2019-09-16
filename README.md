@@ -3,14 +3,14 @@
 
 Main view:
 
-![ScreenShot](images/"Main view".png)
+![ScreenShot](images/Main_view.png)
 
 
 Win view:
 
-![ScreenShot](images/"Win view".png)
+![ScreenShot](images/Win_view.png)
 
 
 Stalemate view:
 
-![ScreenShot](images/"Stalemate view".png)
+![ScreenShot](images/Stalemate_view.png)
