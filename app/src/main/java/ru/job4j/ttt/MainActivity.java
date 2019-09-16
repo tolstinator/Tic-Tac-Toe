@@ -175,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
         memory = new Memory(btns);
         listXButton = new ArrayList<>();
         listOButton = new ArrayList<>();
+        currentPlayer = 'X';
     }
 
     private int seekX(Integer id) {
